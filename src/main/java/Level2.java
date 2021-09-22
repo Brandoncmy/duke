@@ -10,9 +10,6 @@ public class Level2 {
                 System.out.println(i+1 + ". " + item[i]);
                 i++;
             }
-
-
-
     }
 
     public static void main(String[] args) {
