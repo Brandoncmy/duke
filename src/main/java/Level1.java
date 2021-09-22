@@ -15,12 +15,7 @@ public class Level1 {
 
         System.out.println(greet);
 
-        String echo;
 
-        Scanner in = new Scanner(System.in);
-        echo = in.nextLine();
-
-        String echoStop = "bye";
 
         while (!echo.equals(echoStop)) {
 
