@@ -99,7 +99,7 @@ public class Level5 {
                     + "☹ OOPS!!! I'm sorry, but I don't know what that means :-(\n"
                     + "_______________________________________________________________\n");
         }
-        return false;
+        return true;
     }
 
     public static boolean checkTask(String taskName) throws DukeException {
@@ -125,7 +125,6 @@ public class Level5 {
     }
 
     public static class DukeException extends Exception {
-
     }
 
     public static class Todo extends Task {
