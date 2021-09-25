@@ -3,7 +3,7 @@ import java.lang.Integer;
 import java.lang.String;
 import java.lang.*;
 
-public class Level4 {
+public class Level5 {
 
     public static void main(String[] args) throws DukeException {
         printGreet(); // start //
@@ -18,7 +18,6 @@ public class Level4 {
 
 
         while (input != null) {
-            checkTask(input);
 
             if (firstInput.equalsIgnoreCase("bye")){                                                                      // "exit"
                 printExit();   //exit//
@@ -41,33 +40,37 @@ public class Level4 {
                 }
 
             } else {
-                String taskDescription = input.substring(firstInput.length(), input.length());                              // keep task description
+                if (checkError(input)) {
+                    break;
+                } else {
+                    String taskDescription = input.substring(firstInput.length(), input.length());                              // keep task description
 
-                switch (firstInput){
-                    case "todo" :
-                        Todo t = new Todo (taskDescription);
-                        t.type = "todo";
-                        listOfTask[taskCount] = t;
-                        break;
-                    case "deadline" :
-                        Deadline d = new Deadline(taskDescription);
-                        d.type = "deadline";
-                        listOfTask[taskCount] = d;
-                        break;
-                    case "event" :
-                        Event e = new Event(taskDescription);
-                        e.type = "event";
-                        listOfTask[taskCount] = e;
-                        break;
+                    switch (firstInput) {
+                        case "todo":
+                            Todo t = new Todo(taskDescription);
+                            t.type = "todo";
+                            listOfTask[taskCount] = t;
+                            break;
+                        case "deadline":
+                            Deadline d = new Deadline(taskDescription);
+                            d.type = "deadline";
+                            listOfTask[taskCount] = d;
+                            break;
+                        case "event":
+                            Event e = new Event(taskDescription);
+                            e.type = "event";
+                            listOfTask[taskCount] = e;
+                            break;
+                    }
+
+                    System.out.println("_________________________________________________\n"
+                            + "Got it. I've added this task: \n"
+                            + "\t" + listOfTask[taskCount].getType() + listOfTask[taskCount].getStatusIcon() + listOfTask[taskCount].description + "\n"
+                            + "Now you have " + (taskCount + 1) + " tasks in the list." + "\n"
+                            + "_________________________________________________\n");
+
+                    taskCount++;
                 }
-
-                System.out.println("_________________________________________________\n"
-                                    + "Got it. I've added this task: \n"
-                                    + "\t" + listOfTask[taskCount].getType() + listOfTask[taskCount].getStatusIcon() + listOfTask[taskCount].description + "\n"
-                                    + "Now you have " + (taskCount+1) + " tasks in the list." + "\n"
-                                    + "_________________________________________________\n");
-
-                taskCount++;
             }
             input = in.nextLine();
             firstInput = input.split(" ")[0];
@@ -76,7 +79,30 @@ public class Level4 {
 
     }
 
-    public static String checkTask(String taskName) throws DukeException {
+    public static boolean checkError (String descriptor){
+        try{
+            checkTask(descriptor);
+        }catch (IllegalStateException e) {
+            System.out.println("______________________________________________________\n"
+                    + "☹ OOPS!!! The description of a todo cannot be empty.\n"
+                    + "______________________________________________________\n");
+        }catch (IllegalCallerException e) {
+            System.out.println("______________________________________________________\n"
+                    + "☹ OOPS!!! The description of an event cannot be empty.\n"
+                    + "______________________________________________________\n");
+        }catch (IllegalAccessError e) {
+            System.out.println("______________________________________________________\n"
+                    + "☹ OOPS!!! The description of a deadline cannot be empty.\n"
+                    + "______________________________________________________\n");
+        }catch (DukeException e) {
+            System.out.println("_______________________________________________________________\n"
+                    + "☹ OOPS!!! I'm sorry, but I don't know what that means :-(\n"
+                    + "_______________________________________________________________\n");
+        }
+        return false;
+    }
+
+    public static boolean checkTask(String taskName) throws DukeException {
         String firstInput = taskName.split(" ")[0];
         firstInput.toLowerCase();
         String taskDescription = taskName.substring(firstInput.length(), taskName.length());
@@ -84,29 +110,21 @@ public class Level4 {
         switch (firstInput){
             case "todo" :
                 if (taskDescription.isEmpty()){
-                    return("______________________________________________________\n"
-                            + "☹ OOPS!!! The description of a todo cannot be empty.\n"
-                            + "______________________________________________________\n");
+                    throw new IllegalStateException();
                 }
             case "event" :
                 if (taskDescription.isEmpty()){
-                    return("______________________________________________________\n"
-                            + "☹ OOPS!!! The description of an event cannot be empty.\n"
-                            + "______________________________________________________\n");
+                    throw new IllegalCallerException();
                 }
             case "deadline" :
                 if (taskDescription.isEmpty()){
-                    return("______________________________________________________\n"
-                            + "☹ OOPS!!! The description of a deadline cannot be empty.\n"
-                            + "______________________________________________________\n");
+                    throw new IllegalAccessError();
                 }
-            default: return("______________________________________________________\n"
-                    + "☹ OOPS!!! I'm sorry, but I don't know what that means :-(\n"
-                    + "______________________________________________________\n");
+            default: throw new DukeException();
         }
     }
 
-    public class DukeException extends Exception {
+    public static class DukeException extends Exception {
 
     }
 
