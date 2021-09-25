@@ -3,7 +3,6 @@ import java.lang.Integer;
 import java.lang.String;
 import java.lang.*;
 
-
 public class Level4 {
 
     public static void main(String[] args) {
