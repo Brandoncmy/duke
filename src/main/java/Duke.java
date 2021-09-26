@@ -1,15 +1,35 @@
 import java.util.Scanner;
 import java.lang.Integer;
 import java.lang.String;
-import java.lang.*;
+import java.util.ArrayList;
 
-public class Duke {                                                                         // Week 7 - level 6 //
+public class Duke {                                                                         // Week 7 - level 6 - done//
+    private static ArrayList<Task> taskList = new ArrayList<Task>();
 
-    public static void main(String[] args) throws DukeException {
+    public static void printTaskList(ArrayList<Task> item){
+        System.out.println("_________________________________________________");
+        System.out.println("Here are the tasks in your list:");
+
+        int i = 0;
+        for (Task list : taskList){
+            System.out.println(i+1 + "." + taskList.get(i).getType() + taskList.get(i).getStatusIcon() + taskList.get(i).description);
+            i++;
+        }
+        System.out.println("_________________________________________________\n");
+    }
+
+    public static void printDeleteTask(int index){
+        System.out.println("_________________________________________________");
+        System.out.println("Noted. I've removed this task:");
+        System.out.println("\t" + taskList.get(index).getType() + taskList.get(index).getStatusIcon() + taskList.get(index).description);
+        System.out.println("Now you have " + (taskList.size() - 1) + " tasks in the list.");
+        System.out.println("_________________________________________________\n");
+    }
+
+    public static void main(String[] args) {
         printGreet(); // start //
 
         Scanner in = new Scanner(System.in);
-        Task[] listOfTask = new Task [100];
         int taskCount = 0;
 
         String input = "User input";
@@ -26,17 +46,21 @@ public class Duke {                                                             
                 printExit();   //exit//
                 break;
             }else if (firstInput.equalsIgnoreCase("list")){                                                       // print "list"
-                System.out.println("_________________________________________________");
-                printTaskList(listOfTask);
-                System.out.println("_________________________________________________\n");
+                printTaskList(taskList);
+            }else if (firstInput.equalsIgnoreCase("delete")){                                                     // print "delete"
+                String deleteNum = input.split(" ")[1];
+                int d_num = Integer.parseInt(deleteNum) - 1;
+                printDeleteTask(d_num);
+                taskList.remove(d_num-1);
+
             }else if (firstInput.equalsIgnoreCase("done")){                                                       // make "done"
                 String taskNum = input.split(" ")[1];
                 int num = Integer.parseInt(taskNum) - 1;
 
-                if (listOfTask[num].description !=  null){
-                    listOfTask[num].markAsDone();                                                                            //list : mark as done
+                if (taskList.get(num).description !=  null){
+                    taskList.get(num).markAsDone();                                                                            //list : mark as done
                     System.out.println("_________________________________________________");
-                    System.out.println("Nice! I've marked this task as done: \n" + listOfTask[num].getStatusIcon() + listOfTask[num].description);
+                    System.out.println("Nice! I've marked this task as done: \n" + taskList.get(num).getStatusIcon() + taskList.get(num).description);
                     System.out.println("_________________________________________________\n");
                 }else{
                     System.out.println("There is no task #" + taskNum+1);
@@ -51,23 +75,23 @@ public class Duke {                                                             
                         case "todo":
                             Todo t = new Todo(taskDescription);
                             t.type = "todo";
-                            listOfTask[taskCount] = t;
+                            taskList.add(t);
                             break;
                         case "deadline":
                             Deadline d = new Deadline(taskDescription);
                             d.type = "deadline";
-                            listOfTask[taskCount] = d;
+                            taskList.add(d);
                             break;
                         case "event":
                             Event e = new Event(taskDescription);
                             e.type = "event";
-                            listOfTask[taskCount] = e;
+                            taskList.add(e);
                             break;
                     }
 
                     System.out.println("_________________________________________________\n"
                             + "Got it. I've added this task: \n"
-                            + "\t" + listOfTask[taskCount].getType() + listOfTask[taskCount].getStatusIcon() + listOfTask[taskCount].description + "\n"
+                            + "\t" + taskList.get(taskCount).getType() + taskList.get(taskCount).getStatusIcon() + taskList.get(taskCount).description + "\n"
                             + "Now you have " + (taskCount + 1) + " tasks in the list." + "\n"
                             + "_________________________________________________\n");
 
@@ -215,17 +239,5 @@ public class Duke {                                                             
                 + "_________________________________________________\n";
 
         System.out.println(exit);
-    }
-
-    public static void printTaskList(Task[] item){
-
-        System.out.println("Here are the tasks in your list:");
-
-        int i = 0;
-
-        while(item[i] != null){
-            System.out.println(i+1 + "." + item[i].getType() + item[i].getStatusIcon() + item[i].description);
-            i++;
-        }
     }
 }
