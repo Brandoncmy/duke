@@ -74,7 +74,7 @@ public class Duke {                                                             
                 String deleteNum = input.split(" ")[1];
                 int d_num = Integer.parseInt(deleteNum) - 1;
                 printDeleteTask(d_num);
-                taskList.remove(d_num-1);
+                taskList.remove(d_num);
 
             }else if (firstInput.equalsIgnoreCase("done")){                                                       // make "done"
                 String taskNum = input.split(" ")[1];
