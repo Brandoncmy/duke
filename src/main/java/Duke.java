@@ -1,7 +1,11 @@
+import java.nio.file.Files;
 import java.util.Scanner;
 import java.lang.Integer;
 import java.lang.String;
 import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
+import java.io.FileWriter;
 
 public class Duke {                                                                         // Week 7 - level 6 - done//
     private static ArrayList<Task> taskList = new ArrayList<Task>();
@@ -12,7 +16,7 @@ public class Duke {                                                             
 
         int i = 0;
         for (Task list : taskList){
-            System.out.println(i+1 + "." + taskList.get(i).getType() + taskList.get(i).getStatusIcon() + taskList.get(i).description);
+            System.out.println(i+1 + "." + "[" + taskList.get(i).getType() + "]" + taskList.get(i).getStatusIcon() + taskList.get(i).description);
             i++;
         }
         System.out.println("_________________________________________________\n");
@@ -26,7 +30,26 @@ public class Duke {                                                             
         System.out.println("_________________________________________________\n");
     }
 
-    public static void main(String[] args) {
+    private static void appendToFile(String filePath, ArrayList<Task> item) throws IOException {
+        FileWriter fw = new FileWriter(filePath, true); // create a FileWriter in append mode
+
+        int i = 0;
+
+        for (Task list : taskList){
+            fw.write(taskList.get(i).getType() + " | " + taskList.get(i).isDone + " | " + taskList.get(i).description + '\n');
+            i++;
+        }
+
+        fw.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        // create file //
+        File duke = new File("duke.txt");
+        checkFile(duke);
+
+
         printGreet(); // start //
 
         Scanner in = new Scanner(System.in);
@@ -63,7 +86,7 @@ public class Duke {                                                             
                     System.out.println("Nice! I've marked this task as done: \n" + taskList.get(num).getStatusIcon() + taskList.get(num).description);
                     System.out.println("_________________________________________________\n");
                 }else{
-                    System.out.println("There is no task #" + taskNum+1);
+                    System.out.println("There is no task #" + num);
                 }
 
             } else {
@@ -91,13 +114,29 @@ public class Duke {                                                             
 
                     System.out.println("_________________________________________________\n"
                             + "Got it. I've added this task: \n"
-                            + "\t" + taskList.get(taskCount).getType() + taskList.get(taskCount).getStatusIcon() + taskList.get(taskCount).description + "\n"
+                            + "\t" + "[" + taskList.get(taskCount).getType() + "]" + taskList.get(taskCount).getStatusIcon() + taskList.get(taskCount).description + "\n"
                             + "Now you have " + (taskCount + 1) + " tasks in the list." + "\n"
                             + "_________________________________________________\n");
 
                     taskCount++;
             }
         }
+        appendToFile(duke.getAbsolutePath(), taskList);
+    }
+
+    public static boolean checkFile (File duke){
+        try {
+            if (duke.createNewFile()) {
+                System.out.println("File created: " + duke.getName());
+            } else {
+                System.out.println("File already exists.");
+            }
+            System.out.println("File path: " + duke.getAbsolutePath());
+        } catch (IOException e) {
+            System.out.println("An error occurred.");
+            e.printStackTrace();
+        }
+        return true;
     }
 
     public static boolean checkError (String descriptor){
@@ -168,15 +207,20 @@ public class Duke {                                                             
 
         public Deadline(String description) {
             super(description);
+            if (description.contains("/by"))
             this.description = description.replace("/by", "(by:") + ")";
         }
     }
 
     public static class Event extends Task {
 
+        protected String taskDesc;
+
         public Event(String description) {
             super(description);
-            this.description = description.replace("/at", "(at:") + ")";
+            if (description.contains("/at")){
+                this.description = description.replace("/at", "(at:") + ")";
+            }
         }
     }
 
@@ -190,16 +234,16 @@ public class Duke {                                                             
             this.isDone = false;
         }
 
+        public boolean markAsDone() {
+            this.isDone = true;
+            return true; // mark done task with X
+        }
+
         public String getStatusIcon() {
             if (!isDone){
                 return ("[ ] ");
             }
             return (isDone ? "[X] " : " "); // mark done task with X
-        }
-
-        public String markAsDone() {
-            this.isDone = true;
-            return (this.getStatusIcon()); // mark done task with X
         }
 
         public String getType(){
@@ -208,19 +252,20 @@ public class Duke {                                                             
 
             switch (taskType){
                 case "todo" :
-                    type = "[T]";
+                    type = "T";
                     break;
                 case "deadline" :
-                    type = "[D]";
+                    type = "D";
                     break;
                 case "event" :
-                    type = "[E]";
+                    type = "E";
                     break;
             }
             return type;
         }
 
     }
+
     public static void printGreet(){
 
         String greet
