@@ -1,4 +1,5 @@
-import java.nio.file.Files;
+package scale;
+
 import java.util.Scanner;
 import java.lang.Integer;
 import java.lang.String;
@@ -7,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.FileWriter;
 
-public class Duke {                                                                         // Week 7 - level 6 - done//
+public class Duke {                                                                         // Week 8 - level 7 - done//
     private static ArrayList<Task> taskList = new ArrayList<Task>();
 
     public static void printTaskList(ArrayList<Task> item){

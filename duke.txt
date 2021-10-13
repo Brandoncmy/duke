@@ -6,3 +6,4 @@ T | false |  1
 T | false |  2
 T | false |  4
 T | false |  5
+T | true |  read
