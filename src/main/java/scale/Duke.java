@@ -271,7 +271,7 @@ public class Duke {                                                             
 
         String greet
                 = "_________________________________________________\n"
-                + "Hello! I'm Duke\n"
+                + "Hello! I'm scale.Duke\n"
                 + "What can I do for you?\n"
                 + "_________________________________________________\n";
 
