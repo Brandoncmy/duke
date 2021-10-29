@@ -1,14 +1,12 @@
-package scale;
+package duke;
 
-import java.util.Scanner;
-import java.lang.Integer;
-import java.lang.String;
-import java.util.ArrayList;
 import java.io.File;
-import java.io.IOException;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Scanner;
 
-public class Duke {                                                                         // Week 8 - level 7 - done//
+public class BeforeOOP {                                                                         // Week 8 - level 7 - done//
     private static ArrayList<Task> taskList = new ArrayList<Task>();
 
     public static void printTaskList(ArrayList<Task> item){
