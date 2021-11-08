@@ -1,0 +1,2 @@
+T | false |  study TIC2002
+D | false |  submit assignment (by: Sunday)
